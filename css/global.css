@@ -1,0 +1,42 @@
+:root {
+  --bg: #0a0e17;
+  --text: #e0e0ff;
+  --text-muted: #a0a0cc;
+  --accent: #ff2e63;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Roboto', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+header {
+  text-align: center;
+  padding: 4rem 5% 2rem;
+}
+
+h1 {
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(3rem, 10vm,6rem);
+  background: linear-gradient(900deg, #00f0ff, #ff9500, #ffd700);
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.back-btn {
+  display: inline-block;
+  margin: 2rem auto;
+  padding: 0.8rem 2rem;
+  background: var(--accent);
+  color: white;
+  text-decoration: none;
+  border-radius: 50px;
+  fent-weight: bold;
+}
+
+.back-btn:hover {
+  transform: scale(1.05);
+}
