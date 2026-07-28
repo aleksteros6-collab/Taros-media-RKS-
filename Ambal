@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Амбал — Защитники Солнца</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background-color: #0a0a0a;
+            color: #c0b9b0;
+            display: flex;
+            justify-content: center;
+            padding: 40px 20px;
+            background-image: radial-gradient(circle at 20% 30%, #1a150f, #040302);
+            min-height: 100vh;
+        }
+
+        /* ГЛАВНАЯ ОБЁРТКА — с эффектом затемнения по краям */
+        .page {
+            max-width: 1200px;
+            width: 100%;
+            background: #0c0a08;
+            padding: 50px 40px;
+            box-shadow: inset 0 0 80px rgba(0, 0, 0, 0.9), 0 0 50px rgba(180, 100, 30, 0.15);
+            border: 1px solid #3d2e22;
+            position: relative;
+        }
+
+        /* Эффект ржавой металлической текстуры */
+        .page::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="none"/><path d="M10 10 L90 10 L90 90 L10 90 Z" stroke="%2333221a" stroke-width="0.5" fill="none" opacity="0.3"/></svg>');
+            background-size: 60px 60px;
+            pointer-events: none;
+            opacity: 0.2;
+        }
+
+        /* ДОСЬЕ — основная табличка со скошенным эффектом */
+        .dossier {
+            background: #1f1813;
+            border: 3px solid #5a4030;
+            padding: 30px 25px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 25px;
+            transform: rotate(-0.5deg);
+            margin-bottom: 40px;
+            position: relative;
+            box-shadow:
+                inset 0 0 20px rgba(0, 0, 0, 0.8),
+                0 10px 30px rgba(0, 0, 0, 0.7);
+        }
+
+        /* Болты по углам таблички */
+        .dossier::before,
+        .dossier::after {
+            content: '⚙';
+            position: absolute;
+            font-size: 28px;
+            color: #8a6a4a;
+            opacity: 0.5;
+        }
+        .dossier::before {
+            top: -8px;
+            left: -6px;
+            transform: rotate(15deg);
+        }
+        .dossier::after {
+            bottom: -8px;
+            right: -6px;
+            transform: rotate(-15deg);
+        }
+
+        /* ЛЕВАЯ ЧАСТЬ — ФОТО (1/4) */
+        .photo-block {
+            flex: 0 0 23%;
+            min-width: 160px;
+            max-width: 220px;
+            background: #0f0c09;
+            border: 4px solid #5a4030;
+            padding: 8px;
+            transform: rotate(0.5deg);
+            box-shadow: inset 0 0 30px #0a0806;
+        }
+
+        .photo-block img {
+            width: 100%;
+            height: auto;
+            display: block;
+            filter: grayscale(0.6) contrast(1.2);
+            border: 1px solid #3d2e22;
+        }
+
+        /* ПРАВАЯ ЧАСТЬ — ТЕКСТ */
+        .info-block {
+            flex: 1;
+            background: #17120e;
+            padding: 20px 25px;
+            border-left: 4px solid #6b4e34;
+            box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.7);
+            transform: rotate(0.3deg);
+        }
+
+        .info-block h1 {
+            font-size: 2.6rem;
+            font-weight: 700;
+            color: #dac09a;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            border-bottom: 3px solid #6b4e34;
+            padding-bottom: 8px;
+            margin-bottom: 18px;
+            text-shadow: 0 0 20px rgba(180, 130, 70, 0.3);
+        }
+
+        .info-block .sub {
+            color: #b8a088;
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .info-block .sub span {
+            background: #1f1813;
+            padding: 4px 14px;
+            border-left: 3px solid #8a6a4a;
+        }
+
+        .dossier-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px 30px;
+            margin-top: 12px;
+        }
+
+        .dossier-grid .label {
+            color: #8a7a6a;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            border-bottom: 1px dashed #3d2e22;
+        }
+
+        .dossier-grid .value {
+            color: #d4c8b8;
+            font-size: 0.95rem;
+            padding-bottom: 6px;
+        }
+
+        .dossier-grid .value a {
+            color: #d4a86a;
+            text-decoration: none;
+            border-bottom: 1px dotted #6b4e34;
+        }
+        .dossier-grid .value a:hover {
+            color: #e8c88a;
+            border-bottom-color: #a8865a;
+        }
+
+        /* БИОГРАФИЯ */
+        .bio-block {
+            background: #17120e;
+            padding: 25px 30px;
+            border-left: 6px solid #6b4e34;
+            margin: 40px 0 30px;
+            transform: rotate(-0.2deg);
+            box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.6);
+        }
+
+        .bio-block h2 {
+            color: #dac09a;
+            font-size: 1.8rem;
+            letter-spacing: 2px;
+            border-bottom: 2px solid #4d3a2a;
+            padding-bottom: 8px;
+            margin-bottom: 18px;
+            text-transform: uppercase;
+        }
+
+        .bio-block p {
+            line-height: 1.7;
+            font-size: 1rem;
+            color: #c4b6a6;
+            margin-bottom: 14px;
+        }
+
+        /* СОБЫТИЯ — альтернативные ветки */
+        .events-block {
+            background: #1a140f;
+            padding: 25px 30px;
+            border: 2px solid #4d3a2a;
+            margin: 30px 0;
+            transform: rotate(0.4deg);
+            box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.7);
+        }
+
+        .events-block h2 {
+            color: #dac09a;
+            font-size: 1.6rem;
+            letter-spacing: 1px;
+            border-bottom: 2px solid #5a4030;
+            padding-bottom: 8px;
+            margin-bottom: 18px;
+            text-transform: uppercase;
+        }
+
+        .events-block ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .events-block li {
+            padding: 10px 0 10px 30px;
+            border-bottom: 1px solid #2d221a;
+            color: #c4b6a6;
+            position: relative;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .events-block li::before {
+            content: '◆';
+            color: #8a6a4a;
+            position: absolute;
+            left: 4px;
+            font-size: 0.9rem;
+        }
+
+        /* ГАЛЕРЕЯ */
+        .gallery-block {
+            background: #17120e;
+            padding: 25px 30px;
+            margin: 30px 0;
+            border: 2px solid #3d2e22;
+            transform: rotate(-0.3deg);
+        }
+
+        .gallery-block h2 {
+            color: #dac09a;
+            font-size: 1.6rem;
+            letter-spacing: 1px;
+            border-bottom: 2px solid #4d3a2a;
+            padding-bottom: 8px;
+            margin-bottom: 18px;
+            text-transform: uppercase;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 14px;
+        }
+
+        .gallery-grid .item {
+            background: #0f0c09;
+            border: 2px solid #3d2e22;
+            aspect-ratio: 1 / 1.2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #5a4030;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.6);
+            transition: 0.2s;
+            cursor: pointer;
+        }
+
+        .gallery-grid .item:hover {
+            border-color: #8a6a4a;
+            background: #1f1813;
+            color: #b8a088;
+        }
+
+        /* УЧАСТИЕ В ПРОЕКТАХ */
+        .projects-block {
+            background: #17120e;
+            padding: 25px 30px;
+            border-left: 6px solid #6b4e34;
+            margin: 30px 0;
+            transform: rotate(0.2deg);
+        }
+
+        .projects-block h2 {
+            color: #dac09a;
+            font-size: 1.6rem;
+            letter-spacing: 1px;
+            border-bottom: 2px solid #4d3a2a;
+            padding-bottom: 8px;
+            margin-bottom: 18px;
+            text-transform: uppercase;
+        }
+
+        .projects-block .project-item {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            padding: 8px 0;
+            border-bottom: 1px solid #2d221a;
+            color: #c4b6a6;
+        }
+
+        .projects-block .project-item .name {
+            font-weight: bold;
+            color: #d4c0a8;
+        }
+
+        .projects-block .project-item .phase {
+            color: #8a6a4a;
+            font-size: 0.85rem;
+        }
+
+        /* Адаптив */
+        @media (max-width: 800px) {
+            .photo-block {
+                flex: 1 1 100%;
+                max-width: 100%;
+                text-align: center;
+            }
+            .photo-block img {
+                max-width: 240px;
+                margin: 0 auto;
+            }
+            .dossier-grid {
+                grid-template-columns: 1fr;
+            }
+            .page {
+                padding: 20px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="page">
+
+    <!-- ============ ДОСЬЕ ============ -->
+    <div class="dossier">
+
+        <!-- ФОТО -->
+        <div class="photo-block">
+            <img src="https://via.placeholder.com/400x600/1f1813/8a6a4a?text=AMBAL" alt="Амбал">
+            <!-- Замени ссылку на реальное фото персонажа -->
+        </div>
+
+        <!-- ИНФОРМАЦИЯ -->
+        <div class="info-block">
+            <h1>Амбал</h1>
+            <div class="sub">
+                <span>Имя: Олег Яковлев</span>
+                <span>Статус: Активен (Фаза 5)</span>
+            </div>
+
+            <div class="dossier-grid">
+                <div class="label">Общая информация</div>
+                <div class="value">Возраст: 58 лет (р. 1967) / Место: СССР, Россия / Роль: Тяжёлый боец, хранитель кибер-города</div>
+
+                <div class="label">Способности</div>
+                <div class="value">Летающий костюм «Амбал-09» • Сверхсила • Системы жизнеобеспечения • Модификации</div>
+
+                <div class="label">Союзники</div>
+                <div class="value"><a href="#">Андроид</a>, <a href="#">Неон</a>, <a href="#">Пульсатор</a></div>
+
+                <div class="label">Враги</div>
+                <div class="value"><a href="#">Кибермонах</a>, <a href="#">Агитатор</a>, Оружейный контроль</div>
+
+                <div class="label">Команды / Организации</div>
+                <div class="value">Защитники Солнца (экс), Корпус киборгов (лидер), Отряд Содружества (союзник)</div>
+
+                <div class="label">Оружие / Костюмы</div>
+                <div class="value">Амбал-09 • Амбал-07 • Модифицированные системы охлаждения</div>
+
+                <div class="label">Участие в проектах</div>
+                <div class="value">Амбал: Нулевой пациент • Защитники Солнца 1–4 • Амбал 2 • Отряд Содружества</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============ БИОГРАФИЯ ============ -->
+    <div class="bio-block">
+        <h2>Каноничная биография</h2>
+        <p>Олег Яковлев родился в семье военного и швеи. С детства воспитывался в духе долга и дисциплины. В 1987 году поступил в военную академию, где стал одним из лучших курсантов.</p>
+        <p>В 1990 году его брат Кирилл, ушедший в подполье, организовал взрыв на спецоперации. Олег выжил, но был тяжело ранен и помещён в прототип костюма «Амбал-09» по инициативе командования.</p>
+        <p>С тех пор он пытается сохранить человечность внутри металлического тела. Спасал людей, воевал с Агитатором, пережил потерю Насти (Андроид) и воспитал нового героя — Пульсатора.</p>
+        <p>В Фазе 5 он строит город для киборгов и становится его хранителем, продолжая защищать тех, кто ищет убежище.</p>
+    </div>
+
+    <!-- ============ СОБЫТИЯ (АЛЬТЕРНАТИВЫ) ============ -->
+    <div class="events-block">
+        <h2>События, повлиявшие на альтернативные ветки</h2>
+        <ul>
+            <li><strong>Взрыв 1990 года</strong> — разделил жизнь Олега на «до» и «после». В альтернативных ветках он либо погибает, либо не попадает в костюм, оставаясь обычным солдатом.</li>
+            <li><strong>Встреча с Настей (Андроид)</strong> — в некоторых реальностях он спасает её, в других она остаётся с Агитатором навсегда.</li>
+            <li><strong>Город киборгов</strong> — в альтернативных вселенных он не строит город, а уходит в полное одиночество или становится наёмником.</li>
+            <li><strong>Пульсатор</strong> — в одной из веток он становится его врагом, а не учеником.</li>
+        </ul>
+    </div>
+
+    <!-- ============ ГАЛЕРЕЯ ============ -->
+    <div class="gallery-block">
+        <h2>Галерея</h2>
+        <div class="gallery-grid">
+            <div class="item">Костюм Амбал-09</div>
+            <div class="item">Амбал в бою</div>
+            <div class="item">Город киборгов</div>
+            <div class="item">Сражение с Кибермонахом</div>
+            <div class="item">Встреча с Пульсатором</div>
+            <div class="item">Арт: Амбал и Андроид</div>
+        </div>
+    </div>
+
+    <!-- ============ УЧАСТИЕ В ПРОЕКТАХ (детально) ============ -->
+    <div class="projects-block">
+        <h2>Участие в проектах</h2>
+        <div class="project-item">
+            <span class="name">Амбал: Нулевой пациент</span>
+            <span class="phase">Фаза 1</span>
+        </div>
+        <div class="project-item">
+            <span class="name">Защитники Солнца</span>
+            <span class="phase">Фаза 2</span>
+        </div>
+        <div class="project-item">
+            <span class="name">Защитники Солнца 2: Последний импульс</span>
+            <span class="phase">Фаза 3</span>
+        </div>
+        <div class="project-item">
+            <span class="name">Защитники Солнца 3: Тень Агитатора</span>
+            <span class="phase">Фаза 4</span>
+        </div>
+        <div class="project-item">
+            <span class="name">Защитники Солнца 4: Абсолютный ноль</span>
+            <span class="phase">Фаза 4</span>
+        </div>
+        <div class="project-item">
+            <span class="name">Амбал 2: Наследие стали</span>
+            <span class="phase">Фаза 5</span>
+        </div>
+        <div class="project-item">
+            <span class="name">Отряд Содружества</span>
+            <span class="phase">Фаза 5</span>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>
